@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Review Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        .review-form {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+        .review-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            resize: vertical;
+            height: 80px;
+        }
+        .form-group select {
+            appearance: none;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>') no-repeat right 10px center;
+            background-size: 14px;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 600px) {
+            .review-form {
+                padding: 15px;
+            }
+            .submit-btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+        .star-rating {
+        direction: rtl;
+        display: inline-flex;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 24px;
+            color: #ccc;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+        .star-rating input:checked ~ label {
+            color: #f5c518;
+        }
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #f5c518;
+        }
+    </style>
+</head>
+<body>
+
+<div class="review-form">
+    <h2>Developer Monthly Review</h2>
+    <form method="post">
+        {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li class="alert {{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="emp-id">Emp ID</label>
+            <input type="text" id="emp-id" name="emp-id" required>
+        </div>
+
+        <div class="form-group">
+            <label for="developer-name">Developer Name</label>
+            <input type="text" id="developer-name" name="developer-name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="team-leader">Team Leader</label>
+            <input type="text" id="team-leader" name="team-leader">
+        </div>
+
+        <div class="form-group">
+            <label for="project-manager">Project Manager</label>
+            <input type="text" id="project-manager" name="project-manager">
+        </div>
+
+        <div class="form-group">
+            <label for="review-month">Current Month</label>
+            <input type="text" id="review-month" name="review-month" value="{{ current_month }}" readonly required>
+        </div>
+
+        <div class="form-group">
+            <label for="delivery-timelines">Delivery Timelines (Out of 10)</label>
+            <select id="delivery-timelines" name="delivery-timelines">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="utilization">Utilization or Productivity - Task Management (Out of 10)</label>
+            <select id="utilization" name="utilization">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="technology">Technology Understanding - Proxy Usage / Initiative & RND (Out of 10)</label>
+            <select id="technology" name="technology">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="attitude">Attitude Responsibility (Out of 10)</label>
+            <select id="attitude" name="attitude">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="code-quality">Code Quality - Auto QA Checks in script / GIT Lab (Out of 10)</label>
+            <select id="code-quality" name="code-quality">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="communication">Communication - Writing & Speaking Skill (Out of 10)</label>
+            <select id="communication" name="communication">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="glacier-process">Glacier Process Alignment (Frequency, DB, Feed, Status, Work Report, etc.) (Out of 10)</label>
+            <select id="glacier-process" name="glacier-process">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="bugs">BUGs / # of Iterations (Out of 10)</label>
+            <select id="bugs" name="bugs">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="attendance">Attendance / Leave / Working Hours / Non-Productive Hours (Out of 10)</label>
+            <select id="attendance" name="attendance">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="outstanding">Outstanding / Remarkable Performance (In Project or Help Others or Resolve Critical Issues) (Out of 10)</label>
+            <select id="outstanding" name="outstanding">
+                <option value="">Select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="rating">Developer Overall Rating (1 to 5 Stars)</label>
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5">
+                <label for="star5" title="5 stars">&#9733;</label>
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4" title="4 stars">&#9733;</label>
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3" title="3 stars">&#9733;</label>
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2" title="2 stars">&#9733;</label>
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1" title="1 star">&#9733;</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="remarks">Remark / Additional Comments</label>
+            <textarea id="remarks" name="remarks"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Review</button>
+    </form>
+</div>
+
+</body>
+</html>
